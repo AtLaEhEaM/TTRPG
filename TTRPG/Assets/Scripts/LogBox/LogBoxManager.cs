@@ -40,11 +40,15 @@ public class LogBoxManager : MonoBehaviour
         }
     }
 
-    public void NewBox(LogBoxType _type, int _case)
+    public void NewFarmerBox(LogBoxType _type, int _case, bool plantation, FoodTypes type, int amount, float timeToGrow)
     {
-        string finalString = farmerLogs.ConcutSring(_case);
+        string finalString;
 
-        // create UI
+        if (!plantation)
+            finalString = farmerLogs.FarmerResultString(type, amount);
+        else
+            finalString = farmerLogs.StartPlantationStrings(type, amount, timeToGrow);
+            // create UI
         var newBox = Instantiate(LogBoxText, logBoxParent);
         newBox.GetComponent<TextMeshProUGUI>().text = finalString;
         newBox.GetComponent<LogBoxInfo>()._type = _type;

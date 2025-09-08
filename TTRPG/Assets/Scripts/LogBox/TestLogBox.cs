@@ -6,14 +6,29 @@ public class TestLogBox : MonoBehaviour
     public LogBoxType type;
     public int _case;
 
+    public bool plant = false;
+    public FoodTypes _type;
+    public int amount;
+    public float timer;
+
+
     public bool sentAlert = false;
+    public bool sentMessage = false;
 
     private void Update()
     {
         if(sentAlert)
         {
-            LogBoxManager.instance.NewBox(type, _case);
+            LogBoxManager.instance.NewFarmerBox(type, _case, plant, FoodTypes.Wheat, 0, 0);
             sentAlert = false;
+        }
+        if (sentMessage)
+        {
+            LogBoxManager.instance.NewFarmerBox(type, _case, plant, _type, amount, timer);
+
+            GameManager.instance.cropGrowthManager.GrowFood(_type, amount, timer);
+
+            sentMessage = false;
         }
     }
 }
