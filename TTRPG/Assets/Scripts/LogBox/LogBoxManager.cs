@@ -40,7 +40,7 @@ public class LogBoxManager : MonoBehaviour
         }
     }
 
-    public void NewFarmerBox(LogBoxType _type, int _case, bool plantation, FoodTypes type, int amount, float timeToGrow)
+    public void NewFarmerBox(LogBoxType _type, bool plantation, FoodTypes type, int amount, float timeToGrow)
     {
         string finalString;
 

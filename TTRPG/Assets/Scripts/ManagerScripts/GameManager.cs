@@ -7,6 +7,8 @@ public class GameManager : MonoBehaviour
 
     //scripts references here
     public FoodGrowthManager cropGrowthManager;
+    public GameEconomyManager economyManager;
+    public List<FoodData> foodDataList;
 
     public void Awake()
     {

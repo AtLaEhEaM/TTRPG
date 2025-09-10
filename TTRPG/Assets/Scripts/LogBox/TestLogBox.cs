@@ -10,6 +10,8 @@ public class TestLogBox : MonoBehaviour
     public FoodTypes _type;
     public int amount;
     public float timer;
+    public bool addGold;
+    public int gold;
 
 
     public bool sentAlert = false;
@@ -19,16 +21,22 @@ public class TestLogBox : MonoBehaviour
     {
         if(sentAlert)
         {
-            LogBoxManager.instance.NewFarmerBox(type, _case, plant, FoodTypes.Wheat, 0, 0);
+            LogBoxManager.instance.NewFarmerBox(type, plant, FoodTypes.Wheat, 0, 0);
             sentAlert = false;
         }
         if (sentMessage)
         {
-            LogBoxManager.instance.NewFarmerBox(type, _case, plant, _type, amount, timer);
+            LogBoxManager.instance.NewFarmerBox(type, plant, _type, amount, timer);
 
             GameManager.instance.cropGrowthManager.GrowFood(_type, amount, timer);
 
             sentMessage = false;
+        }
+        if (addGold)
+        {
+            addGold = false;
+            GameManager.instance.economyManager.UpdateGold(gold);
+            Debug.Log("saved gold");
         }
     }
 }

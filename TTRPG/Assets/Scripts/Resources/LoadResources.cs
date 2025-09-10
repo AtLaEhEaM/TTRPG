@@ -11,7 +11,9 @@ public class LoadResources : MonoBehaviour
     void Start()
     {
         GameSavingManager.instance.OnSaveDataLoadedEvent += LoadData;
-        GameManager.instance.cropGrowthManager.OnFoodUpdate += LoadData;
+
+        GameManager.instance.economyManager.OnFoodUpdate += LoadData;
+        GameManager.instance.economyManager.OnGoldUpdate += LoadData;
     }
 
     public void LoadData()

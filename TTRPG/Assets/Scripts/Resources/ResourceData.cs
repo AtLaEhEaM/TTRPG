@@ -27,3 +27,13 @@ public class ResourceData
         values = Vector3.zero;
     }
 }
+
+[System.Serializable]
+public class FoodData
+{
+    public FoodTypes type;
+    public int priceToPlant;
+    public int priceToSell;
+    public int conversionRatio;
+    public float timeToGrow;
+}

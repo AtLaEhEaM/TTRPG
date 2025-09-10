@@ -42,15 +42,16 @@ public class FarmerLogs
 
     private int ConvertToFood(FoodTypes type, int amount)
     {
-        switch (type)
+        var foodList = GameManager.instance.foodDataList;
+
+        for (int i = 0; i < foodList.Count; i++) 
         {
-            case FoodTypes.Wheat: return amount/5;        // 5 Wheat = 1 Food
-            case FoodTypes.Rice: return amount/4;         // 4 Rice = 1 Food
-            case FoodTypes.Barley: return amount / 3;
-            //case FoodTypes.Meat: return amount * 2;     // maybe Meat is worth more?
-            //case FoodTypes.Wood: return 0;              // wood is not food at all
-            default: return 0;
+            if (foodList[i].type == type)
+                return Mathf.Max(1, amount / foodList[i].conversionRatio);
+            else
+                continue;
         }
+        return 0;
     }
 
 
