@@ -123,11 +123,13 @@ public class GrowCrops : MonoBehaviour
         if (GameManager.instance.economyManager.gold < 10) // issue   
             return;
 
+        float _time = TimeAdjustmentScript.LogReduce(timeNeeded);
+
         GameManager.instance.economyManager.UpdateGold(-gold);
 
-        LogBoxManager.instance.NewFarmerBox(LogBoxType.Farm, true, foodTypes, crop, DisplayTime(timeNeeded));
+        LogBoxManager.instance.NewFarmerBox(LogBoxType.Farm, true, foodTypes, crop, _time);
 
-        GameManager.instance.cropGrowthManager.GrowFood(foodTypes, crop, timeNeeded);
+        GameManager.instance.cropGrowthManager.GrowFood(foodTypes, crop, _time);
 
         GameSavingManager.instance.SaveGame();
     }

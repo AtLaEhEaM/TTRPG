@@ -10,10 +10,13 @@ public class GameManager : MonoBehaviour
     public GameEconomyManager economyManager;
     public List<FoodData> foodDataList;
     public List<WoodData> woodDataList = new List<WoodData>();
-
+    public float timeLogReductionStrength = 10f;
 
     public void Awake()
     {
         instance = this;
+
+        TimeAdjustmentScript.Strength = timeLogReductionStrength;
+
     }
 }

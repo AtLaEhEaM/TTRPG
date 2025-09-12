@@ -6537,9 +6537,9 @@ MonoBehaviour:
   goldCost: 0
   workerCost: 0
   timeCost: 0
-  goldSliderConstraints: {x: 0, y: 0}
-  workerSliderConstraints: {x: 0, y: 0}
-  stepSize: 1
+  goldSliderConstraints: {x: 0, y: 241.3}
+  workerSliderConstraints: {x: 0, y: 262.8}
+  stepSize: 5
   type: 0
 --- !u!1 &1573756560
 GameObject:
@@ -6755,6 +6755,7 @@ MonoBehaviour:
   - type: 1
     purchasePrice: 8
     timeToChop: 16
+  timeLogReductionStrength: 500
 --- !u!114 &1655737186
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7808,7 +7809,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1975307412}
   m_Layer: 0
-  m_Name: Managers
+  m_Name: '>>>Managers<<<'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

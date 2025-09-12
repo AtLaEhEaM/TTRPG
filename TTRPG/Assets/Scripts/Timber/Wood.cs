@@ -58,6 +58,8 @@ public class Wood : MonoBehaviour
             // zTime = (workers * gold) / timeToChop * amount
             // assuming amount = 1 for now (can be parameterized)
             timeCost = (workerCost * goldCost) / (float)data.timeToChop;
+
+            timeCost = TimeAdjustmentScript.LogReduce(timeCost);
         }
         else
         {
