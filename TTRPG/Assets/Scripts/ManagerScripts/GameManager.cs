@@ -9,6 +9,8 @@ public class GameManager : MonoBehaviour
     public FoodGrowthManager cropGrowthManager;
     public GameEconomyManager economyManager;
     public List<FoodData> foodDataList;
+    public List<WoodData> woodDataList = new List<WoodData>();
+
 
     public void Awake()
     {

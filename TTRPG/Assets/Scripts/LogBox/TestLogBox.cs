@@ -13,6 +13,8 @@ public class TestLogBox : MonoBehaviour
     public bool addGold;
     public int gold;
 
+    public int sendNumber;
+    public bool senddd = false;
 
     public bool sentAlert = false;
     public bool sentMessage = false;
@@ -37,6 +39,17 @@ public class TestLogBox : MonoBehaviour
             addGold = false;
             GameManager.instance.economyManager.UpdateGold(gold);
             Debug.Log("saved gold");
+        }
+
+        if (senddd)
+        {
+            senddd = false;
+            for (int i = 0; i < sendNumber; i++)
+            {
+                LogBoxManager.instance.NewFarmerBox(type, plant, _type, amount, timer);
+
+                GameManager.instance.cropGrowthManager.GrowFood(_type, amount, timer);
+            }
         }
     }
 }

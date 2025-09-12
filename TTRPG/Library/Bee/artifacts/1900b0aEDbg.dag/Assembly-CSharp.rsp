@@ -456,10 +456,12 @@
 "Assets/Scripts/ManagerScripts/GameManager.cs"
 "Assets/Scripts/ManagerScripts/GameSaveData.cs"
 "Assets/Scripts/ManagerScripts/GameSavingManager.cs"
+"Assets/Scripts/ManagerScripts/TimeManager.cs"
 "Assets/Scripts/Resources/LoadResources.cs"
 "Assets/Scripts/Resources/ResourceData.cs"
 "Assets/Scripts/Resources/ResourceManager.cs"
 "Assets/Scripts/Tabs/TraverseTabs.cs"
+"Assets/Scripts/Timber/Wood.cs"
 -langversion:9.0
 /deterministic
 /optimize-

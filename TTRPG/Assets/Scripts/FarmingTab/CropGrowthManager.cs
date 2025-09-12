@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using UnityEngine;
 
 public class FoodGrowthManager : MonoBehaviour
@@ -15,17 +14,20 @@ public class FoodGrowthManager : MonoBehaviour
             GameSavingManager.instance.OnSaveDataLoadedEvent -= LoadData;
     }
 
-    // Called after save data is loaded
-    public void LoadData()
+    // When loading game, resume all crops
+    private void LoadData()
     {
         foreach (var food in GameSavingManager.instance.saveData.foodDataList)
         {
-            // Resume timers for all saved crops
-            StartCoroutine(GrowTimer(food));
+            TimeEventScheduler.instance.ResumeEvent(
+                $"food_{food.foodType}_{Guid.NewGuid()}",
+                DateTime.UtcNow.AddSeconds(food.remainingTime).ToBinary(),
+                () => CompleteFood(food)
+            );
         }
     }
 
-    // Called when planting new crops
+    // Plant new food crop
     public void GrowFood(FoodTypes type, int amount, float timeToGrow)
     {
         var foodData = new LoadFoodData
@@ -37,18 +39,17 @@ public class FoodGrowthManager : MonoBehaviour
 
         GameSavingManager.instance.saveData.foodDataList.Add(foodData);
 
-        StartCoroutine(GrowTimer(foodData));
+        TimeEventScheduler.instance.ScheduleEvent(
+            $"food_{type}_{Guid.NewGuid()}",
+            TimeSpan.FromSeconds(timeToGrow),
+            () => CompleteFood(foodData)
+        );
+
+        GameSavingManager.instance.SaveGame();
     }
 
-    private IEnumerator GrowTimer(LoadFoodData foodData)
+    private void CompleteFood(LoadFoodData foodData)
     {
-        while (foodData.remainingTime > 0f)
-        {
-            foodData.remainingTime -= Time.deltaTime;
-            yield return null;
-        }
-
-        // Crop finished growing
         foodData.remainingTime = 0f;
 
         LogBoxManager.instance.NewFarmerBox(
