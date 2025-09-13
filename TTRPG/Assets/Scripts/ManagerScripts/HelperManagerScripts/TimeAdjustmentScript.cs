@@ -1,8 +1,10 @@
 using System;
+using System.Numerics;
 
 public static class TimeAdjustmentScript
 {
     public static float Strength { get; set; } = 1f;
+    public static Vector2 Power { get; set; } = new Vector2(1.8f, 2.3f);
 
     public static double LogReduce(double value, float? strengthOverride = null)
     {
@@ -10,10 +12,10 @@ public static class TimeAdjustmentScript
 
         float strength = strengthOverride ?? Strength;
 
-        double reduction = Math.Log(value + 1) * strength;
-        double reducedValue = value - reduction;
+        float reduction = MathF.Pow((float)value, Power.X / Power.Y);
+        //double reducedValue = value - reduction;
 
-        return Math.Max(0, reducedValue);
+        return Math.Max(0, (double)reduction);
     }
 
     public static float LogReduce(float value)

@@ -46,10 +46,22 @@ public class Wood : MonoBehaviour
         slider.SetValueWithoutNotify(min);
     }
 
+
+    public void MaxValues()
+    {
+        goldSliderConstraints.y = GameSavingManager.instance.saveData.goldCount;
+        workerSliderConstraints.y = GameSavingManager.instance.saveData.workerCount;
+
+        SetupSlider(goldSlider, goldSliderConstraints);
+        SetupSlider(workerSlider, workerSliderConstraints);
+    }
+
     private void UpdateValues()
     {
         goldCost = Mathf.RoundToInt(goldSlider.value / stepSize) * stepSize;
         workerCost = Mathf.RoundToInt(workerSlider.value / stepSize) * stepSize;
+
+        MaxValues();
 
         WoodData data = GameManager.instance.woodDataList.Find(w => w.type == type);
 

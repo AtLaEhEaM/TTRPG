@@ -10,5 +10,6 @@ public class GameSaveData
 
     public int goldCount;
     public int foodCount;
+    public int workerCount;
 }
 

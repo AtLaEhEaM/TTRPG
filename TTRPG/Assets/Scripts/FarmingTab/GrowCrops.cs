@@ -2,12 +2,11 @@ using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.UIElements;
 
 public class GrowCrops : MonoBehaviour
 {
     [Header("UI References")]
-    [SerializeField] private UnityEngine.UI.Slider costSlider;
+    [SerializeField] private Slider costSlider;
     [SerializeField] private TextMeshProUGUI goldText;
     [SerializeField] private TextMeshProUGUI cropText;
     [SerializeField] private TextMeshProUGUI timeText;
@@ -36,32 +35,38 @@ public class GrowCrops : MonoBehaviour
 
     private void OnDestroy()
     {
-        if (GameSavingManager.instance != null) GameSavingManager.instance.OnSaveDataLoadedEvent -= LoadData;
-        if (costSlider != null) costSlider.onValueChanged.RemoveListener(SnapSlider);
+        if (GameSavingManager.instance != null)
+            GameSavingManager.instance.OnSaveDataLoadedEvent -= LoadData;
+
+        if (costSlider != null)
+            costSlider.onValueChanged.RemoveListener(SnapSlider);
     }
 
     private void LoadData()
     {
         sliderConstraints.x = 10f;
         sliderConstraints.y = GameSavingManager.instance.saveData.goldCount;
-        //Debug.Log("hello world");
 
         ApplySliderConstraintsAndSnap();
     }
 
     private void ApplySliderConstraintsAndSnap()
     {
-        Debug.Log("updated slider ");
         int min = Mathf.RoundToInt(sliderConstraints.x);
         int max = Mathf.RoundToInt(sliderConstraints.y);
+
         min = Mathf.CeilToInt((float)min / stepSize) * stepSize;
         max = Mathf.FloorToInt((float)max / stepSize) * stepSize;
-        if (min > max) { min = max = Mathf.RoundToInt(sliderConstraints.x); }
+
+        if (min > max)
+            min = max = Mathf.RoundToInt(sliderConstraints.x);
 
         costSlider.minValue = min;
         costSlider.maxValue = max;
+
         float clamped = Mathf.Clamp(costSlider.value, costSlider.minValue, costSlider.maxValue);
         costSlider.SetValueWithoutNotify(clamped);
+
         SnapSlider(costSlider.value);
     }
 
@@ -79,7 +84,11 @@ public class GrowCrops : MonoBehaviour
             {
                 gold = snappedValue;
                 crop = food.priceToPlant > 0 ? snappedValue / food.priceToPlant : 0;
-                timeNeeded = crop * food.timeToGrow;
+
+                // Always use log-reduced time
+                float rawTime = crop * food.timeToGrow;
+                timeNeeded = TimeAdjustmentScript.LogReduce(rawTime);
+
                 UpdateTexts();
                 return;
             }
@@ -95,8 +104,9 @@ public class GrowCrops : MonoBehaviour
     {
         if (goldText != null) goldText.text = $"Gold: {gold}";
         if (cropText != null) cropText.text = $"Crops: {crop}";
-        float dispTime = DisplayTime(timeNeeded);
-        if (timeText != null) timeText.text = $"Time: {dispTime:F1}";
+
+        float dispTime = Mathf.Max(1, timeNeeded / 60f); // log-reduced, in minutes
+        if (timeText != null) timeText.text = $"Time: {dispTime:F1}m";
     }
 
     public void SetFoodType(string foodType)
@@ -108,28 +118,16 @@ public class GrowCrops : MonoBehaviour
         }
     }
 
-    public float DisplayTime(float dispTime)
-    {
-        dispTime = timeNeeded / 60f;
-
-        if (dispTime < 1)
-            return dispTime = 1;
-        else
-            return dispTime;
-    }
-
     public void Confirm()
     {
-        if (GameManager.instance.economyManager.gold < 10) // issue   
+        if (GameManager.instance.economyManager.gold < gold)
             return;
-
-        float _time = TimeAdjustmentScript.LogReduce(timeNeeded);
 
         GameManager.instance.economyManager.UpdateGold(-gold);
 
-        LogBoxManager.instance.NewFarmerBox(LogBoxType.Farm, true, foodTypes, crop, _time);
-
-        GameManager.instance.cropGrowthManager.GrowFood(foodTypes, crop, _time);
+        // use the already log-reduced timeNeeded
+        LogBoxManager.instance.NewFarmerBox(LogBoxType.Farm, true, foodTypes, crop, timeNeeded);
+        GameManager.instance.cropGrowthManager.GrowFood(foodTypes, crop, timeNeeded);
 
         GameSavingManager.instance.SaveGame();
     }

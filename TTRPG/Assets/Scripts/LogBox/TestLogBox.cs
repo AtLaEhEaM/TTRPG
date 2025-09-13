@@ -3,19 +3,26 @@ using UnityEngine;
 
 public class TestLogBox : MonoBehaviour
 {
+    [Header("General Info")]
     public LogBoxType type;
     public int _case;
 
+    [Header("Crop Data")]
     public bool plant = false;
     public FoodTypes _type;
     public int amount;
     public float timer;
+
+    [Header("Economy")]
     public bool addGold;
     public int gold;
+    public int workers;
 
+    [Header("Send Logic")]
     public int sendNumber;
     public bool senddd = false;
 
+    [Header("Alerts & Messages")]
     public bool sentAlert = false;
     public bool sentMessage = false;
 
@@ -36,6 +43,7 @@ public class TestLogBox : MonoBehaviour
         }
         if (addGold)
         {
+            GameSavingManager.instance.saveData.workerCount += workers;
             addGold = false;
             GameManager.instance.economyManager.UpdateGold(gold);
             Debug.Log("saved gold");
