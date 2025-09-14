@@ -1,8 +1,7 @@
-using NUnit.Framework;
 using System;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using System.Collections.Generic;
 
 public class LogBoxManager : MonoBehaviour
 {
@@ -12,10 +11,10 @@ public class LogBoxManager : MonoBehaviour
 
     [Header("Data")]
     public FarmerLogs farmerLogs = new();
+    public TreePlantationLogs treeLogs = new();
     public List<LogBoxData> boxes = new();
 
     public static LogBoxManager instance;
-    private string finalText;
 
     private void Awake()
     {
@@ -35,58 +34,66 @@ public class LogBoxManager : MonoBehaviour
 
         foreach (var box in saved)
         {
-            LoadBox(box.type, box.text);
-            KeepRecord(box);
+            CreateLogBox(box.type, box.text);
         }
     }
 
-    public void NewFarmerBox(LogBoxType _type, bool plantation, FoodTypes type, int amount, float timeToGrow)
+    public void CreateLogBox(LogBoxType type, string message)
     {
-        string finalString;
+        var boxData = new LogBoxData { text = message, type = type };
 
-        if (!plantation)
-            finalString = farmerLogs.FarmerResultString(type, amount);
+        if (boxes.Count < 20)
+        {
+            var newBox = Instantiate(LogBoxText, logBoxParent);
+            ApplyBoxData(newBox, boxData);
+            newBox.transform.SetAsFirstSibling();
+        }
         else
-            finalString = farmerLogs.StartPlantationStrings(type, amount, timeToGrow);
-            // create UI
-        var newBox = Instantiate(LogBoxText, logBoxParent);
-        newBox.GetComponent<TextMeshProUGUI>().text = finalString;
-        newBox.GetComponent<LogBoxInfo>()._type = _type;
-        newBox.transform.SetAsFirstSibling();
+        {
+            // recycle oldest
+            var oldest = logBoxParent.GetChild(logBoxParent.childCount - 1).gameObject;
+            ApplyBoxData(oldest, boxData);
+            oldest.transform.SetAsFirstSibling();
+            boxes.RemoveAt(0);
+        }
 
-        // create data
-        var boxData = new LogBoxData { text = finalString, type = _type };
-
-        KeepRecord(boxData);
+        boxes.Add(boxData);
         GameSavingManager.instance.saveData.logBoxDataList = new List<LogBoxData>(boxes);
         GameSavingManager.instance.SaveGame();
     }
 
-    public void LoadBox(LogBoxType _type, string _text)
+
+    public void NewFarmerBox(bool plantation, FoodTypes type, int amount, float timeToGrow)
     {
-        var newBox = Instantiate(LogBoxText, logBoxParent);
-        newBox.GetComponent<TextMeshProUGUI>().text = _text;
-        newBox.GetComponent<LogBoxInfo>()._type = _type;
-        newBox.transform.SetAsFirstSibling();
+        string finalString = !plantation
+            ? farmerLogs.FarmerResultString(type, amount)
+            : farmerLogs.StartPlantationStrings(type, amount, timeToGrow);
+
+        CreateLogBox(LogBoxType.Farm, finalString);
     }
 
-    void KeepRecord(LogBoxData data)
+    public void NewTreePlantationBox(bool plantation, string treeType, int amount, float timeToGrow)
     {
-        // Remove oldest UI and data if we exceed 20
-        if (boxes.Count >= 20)
-        {
-            boxes.RemoveAt(0);
-            Destroy(logBoxParent.GetChild(logBoxParent.childCount - 1).gameObject);
-        }
+        string finalString = plantation
+            ? $"Started plantation of {amount} {treeType}(s), grows in {timeToGrow} days."
+            : $"Harvested {amount} {treeType}(s).";
 
-        boxes.Add(data);
+        CreateLogBox(LogBoxType.TreePlantation, finalString);
+    }
+
+    void ApplyBoxData(GameObject box, LogBoxData data)
+    {
+        box.GetComponent<TextMeshProUGUI>().text = data.text;
+        box.GetComponent<LogBoxInfo>()._type = data.type;
     }
 }
+
 public enum LogBoxType
 {
     Farm,
     Army,
     Scout,
+    TreePlantation, 
 }
 
 [Serializable]
@@ -95,41 +102,3 @@ public class LogBoxData
     public string text;
     public LogBoxType type;
 }
-
-/*
-// Green
-"<color=#00FF00>Green</color>"
-
-// Red
-"<color=#FF0000>Red</color>"
-
-// Blue
-"<color=#0000FF>Blue</color>"
-
-// Yellow
-"<color=#FFFF00>Yellow</color>"
-
-// Cyan
-"<color=#00FFFF>Cyan</color>"
-
-// Magenta
-"<color=#FF00FF>Magenta</color>"
-
-// Orange
-"<color=#FFA500>Orange</color>"
-
-// Purple
-"<color=#800080>Purple</color>"
-
-// Pink
-"<color=#FFC0CB>Pink</color>"
-
-// Brown
-"<color=#A52A2A>Brown</color>"
-
-// Gray
-"<color=#808080>Gray</color>"
-
-// White
-"<color=#FFFFFF>White</color>"
-*/

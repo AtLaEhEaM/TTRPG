@@ -3,11 +3,9 @@ using UnityEngine;
 
 public class GameEconomyManager : MonoBehaviour
 {
-    public int gold;
-    public int food;
+    public EconomyData economyData = new();
 
-    public event Action OnGoldUpdate;
-    public event Action OnFoodUpdate;
+    public event Action OnEconomyUpdate;
 
     public void Start()
     {
@@ -16,33 +14,52 @@ public class GameEconomyManager : MonoBehaviour
 
     void LoadData()
     {
-        gold = GameSavingManager.instance.saveData.goldCount;
-        food = GameSavingManager.instance.saveData.foodCount;
+        economyData = GameSavingManager.instance.saveData.economyData;
+        OnEconomyUpdate?.Invoke();
     }
 
     public void UpdateGold(int _gold)
     {
-        gold += _gold;
+        GameSavingManager.instance.saveData.economyData.gold += _gold;
 
-        SaveResources();
+        GameSavingManager.instance.SaveGame();
 
-        OnGoldUpdate?.Invoke();
+        OnEconomyUpdate?.Invoke();
     }
 
     public void UpdateFood(int _food)
     {
-        food += _food;
-
-        SaveResources();
-
-        OnFoodUpdate?.Invoke();
-    }
-
-    public void SaveResources()
-    {
-        GameSavingManager.instance.saveData.goldCount = gold;
-        GameSavingManager.instance.saveData.foodCount = food;
+        GameSavingManager.instance.saveData.economyData.food += _food;
 
         GameSavingManager.instance.SaveGame();
+
+        OnEconomyUpdate?.Invoke();
     }
+
+    public void UpdateWood(int _wood)
+    {
+        GameSavingManager.instance.saveData.economyData.wood += _wood;
+
+        GameSavingManager.instance.SaveGame();
+
+        OnEconomyUpdate?.Invoke();
+    }
+
+    public void UpdateWorkers(int _workers)
+    {
+        GameSavingManager.instance.saveData.economyData.workers += _workers;
+        
+        GameSavingManager.instance.SaveGame();
+        
+        OnEconomyUpdate?.Invoke();
+    }
+}
+
+[Serializable]
+public class EconomyData
+{
+    public int gold;
+    public int food;
+    public int wood;
+    public int workers;
 }

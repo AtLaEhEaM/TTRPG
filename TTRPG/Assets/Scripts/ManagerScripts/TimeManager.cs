@@ -6,7 +6,12 @@ public class TimeEventScheduler : MonoBehaviour
 {
     public static TimeEventScheduler instance;
 
-    [SerializeField]private List<TimedEventData> events = new List<TimedEventData>();
+    [SerializeField] private List<TimedEventData> events = new List<TimedEventData>();
+
+    public void Start()
+    {
+        GameSavingManager.instance.OnSaveDataLoadedEvent += LoadEvents;
+    }
 
     private void Awake()
     {
@@ -44,6 +49,7 @@ public class TimeEventScheduler : MonoBehaviour
             onComplete = onComplete
         };
         events.Add(ev);
+        SaveEvents();
     }
 
     public void ResumeEvent(string id, long finishTimeBinary, Action onComplete)
@@ -64,14 +70,42 @@ public class TimeEventScheduler : MonoBehaviour
             events.Add(ev);
         }
     }
+
+    public void SaveEvents()
+    {
+        var saveList = new List<SavedEventData>();
+        foreach (var e in events)
+        {
+            saveList.Add(new SavedEventData
+            {
+                id = e.id,
+                finishTimeBinary = e.finishTimeBinary
+            });
+        }
+        GameSavingManager.instance.saveData.scheduledEvents = saveList;
+    }
+
+    public void LoadEvents()
+    {
+        foreach (var saved in GameSavingManager.instance.saveData.scheduledEvents)
+        {
+            if (saved.id.StartsWith("wood_"))
+            {
+                ResumeEvent(saved.id, saved.finishTimeBinary, () =>
+                {
+
+                });
+            }
+        }
+    }
 }
 
 [Serializable]
 public class TimedEventData
 {
-    public string id;                // Unique identifier
-    public long finishTimeBinary;    // Stored in save data
-    public Action onComplete;        // Action when finished
+    public string id;
+    public long finishTimeBinary;
+    public Action onComplete;
 
     public DateTime FinishTime => DateTime.FromBinary(finishTimeBinary);
 }

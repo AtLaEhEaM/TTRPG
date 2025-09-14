@@ -1,6 +1,6 @@
 ﻿using System;
 using UnityEngine;
-using UnityEngine.UI; // ✅ Use this, not UIElements
+using UnityEngine.UI;
 
 public class Wood : MonoBehaviour
 {
@@ -12,6 +12,7 @@ public class Wood : MonoBehaviour
     public int goldCost;
     public int workerCost;
     public float timeCost;
+    public float amountOfWood;
 
     [Header("Settings")]
     [SerializeField] private Vector2 goldSliderConstraints;
@@ -24,10 +25,22 @@ public class Wood : MonoBehaviour
         SetupSlider(goldSlider, goldSliderConstraints);
         SetupSlider(workerSlider, workerSliderConstraints);
 
+        var econ = GameManager.instance?.economyManager;
+        if (econ != null)
+            econ.OnEconomyUpdate += MaxValues;
+
         goldSlider.onValueChanged.AddListener(_ => UpdateValues());
         workerSlider.onValueChanged.AddListener(_ => UpdateValues());
 
+        MaxValues();
         UpdateValues();
+    }
+
+    private void OnDestroy()
+    {
+        var econ = GameManager.instance?.economyManager;
+        if (econ != null)
+            econ.OnEconomyUpdate -= MaxValues;
     }
 
     private void SetupSlider(Slider slider, Vector2 constraints)
@@ -43,14 +56,19 @@ public class Wood : MonoBehaviour
         slider.wholeNumbers = true;
         slider.minValue = min;
         slider.maxValue = max;
-        slider.SetValueWithoutNotify(min);
-    }
 
+        float current = slider.value;
+        if (current < min || current > max)
+            slider.SetValueWithoutNotify(Mathf.Clamp(current, min, max));
+    }
 
     public void MaxValues()
     {
-        goldSliderConstraints.y = GameSavingManager.instance.saveData.goldCount;
-        workerSliderConstraints.y = GameSavingManager.instance.saveData.workerCount;
+        var save = GameSavingManager.instance?.saveData;
+        if (save == null) return;
+
+        goldSliderConstraints.y = save.economyData.gold;
+        workerSliderConstraints.y = save.economyData.workers;
 
         SetupSlider(goldSlider, goldSliderConstraints);
         SetupSlider(workerSlider, workerSliderConstraints);
@@ -65,20 +83,54 @@ public class Wood : MonoBehaviour
 
         WoodData data = GameManager.instance.woodDataList.Find(w => w.type == type);
 
-        if (data != null)
+        if (data != null && data.timeToChop != 0)
         {
-            // zTime = (workers * gold) / timeToChop * amount
-            // assuming amount = 1 for now (can be parameterized)
-            timeCost = (workerCost * goldCost) / (float)data.timeToChop;
-
+            amountOfWood = (((workerCost / 2f) * (goldCost / 4f)) * (data.type == WoodType.Oak ? 4 : 8)/100);
+            timeCost = ((float)data.timeToChop * amountOfWood / (workerCost * goldCost)*1000);
             timeCost = TimeAdjustmentScript.LogReduce(timeCost);
         }
         else
         {
+            amountOfWood = 0f;
             timeCost = 0f;
         }
 
-        Debug.Log($"Wood: {type}, Gold: {goldCost}, Workers: {workerCost}, Time: {timeCost}");
+        Debug.Log($"Wood: {type}, Gold: {goldCost}, Workers: {workerCost}, Time: {timeCost}, Amount: {amountOfWood}");
+    }
+
+    public void Confirm()
+    {
+        if (goldCost > GameManager.instance.economyManager.economyData.gold)
+            return;
+
+        LogBoxManager.instance.CreateLogBox(
+            LogBoxType.TreePlantation,
+            $"You send {workerCost} workers to chop {type} trees!<br>Workers may return in {Mathf.FloorToInt(timeCost)} minutes!"
+        );
+
+        int workersSent = workerCost;
+        WoodType sentType = type;
+        float woodSent = amountOfWood;
+
+        TimeEventScheduler.instance.ScheduleEvent(
+            $"wood_{type}_{Guid.NewGuid()}",
+            TimeSpan.FromSeconds(timeCost),
+            () => CompleteWoodChopping(sentType, workersSent, woodSent)
+        );
+
+        GameManager.instance.economyManager.UpdateGold(-goldCost);
+        GameManager.instance.economyManager.UpdateWorkers(-workerCost);
+    }
+
+    public void CompleteWoodChopping(WoodType choppedType, int returnedWorkers, float woodGained)
+    {
+        GameManager.instance.economyManager.UpdateWorkers(returnedWorkers);
+        GameManager.instance.economyManager.UpdateWood(Mathf.RoundToInt(woodGained));
+
+        LogBoxManager.instance.CreateLogBox(
+            LogBoxType.TreePlantation,
+            $"Your {returnedWorkers} workers returned after chopping {choppedType}!<br>You gained {Mathf.RoundToInt(woodGained)} {choppedType} wood."
+        );
     }
 
     public WoodType AssignWoodType(string _name)
@@ -86,7 +138,7 @@ public class Wood : MonoBehaviour
         if (Enum.TryParse(_name, true, out WoodType result))
             return result;
 
-        return WoodType.Oak; // default fallback
+        return WoodType.Oak;
     }
 }
 
@@ -96,6 +148,7 @@ public class WoodData
     public WoodType type;
     public int purchasePrice;
     public int timeToChop;
+    //public int woodPerTree;
 }
 
 public enum WoodType

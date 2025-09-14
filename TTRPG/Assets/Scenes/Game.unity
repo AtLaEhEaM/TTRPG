@@ -279,6 +279,7 @@ GameObject:
   m_Component:
   - component: {fileID: 72810018}
   - component: {fileID: 72810019}
+  - component: {fileID: 72810020}
   m_Layer: 5
   m_Name: ResourceFarmingArea
   m_TagString: Untagged
@@ -325,6 +326,21 @@ MonoBehaviour:
   - {fileID: 1938405331}
   - {fileID: 444917725}
   currentActiveTab: {fileID: 1938405331}
+--- !u!114 &72810020
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 72810017}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 214a1b1598bcf8c498f920bbbb16eee0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentSubTab: {fileID: 0}
+  backButton: {fileID: 1573756560}
+  MainTabs: {fileID: 1938405331}
 --- !u!1 &90886232
 GameObject:
   m_ObjectHideFlags: 0
@@ -625,6 +641,7 @@ GameObject:
   - component: {fileID: 146511772}
   - component: {fileID: 146511774}
   - component: {fileID: 146511773}
+  - component: {fileID: 146511775}
   m_Layer: 5
   m_Name: Image
   m_TagString: Untagged
@@ -689,6 +706,62 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 146511771}
   m_CullTransparentMesh: 1
+--- !u!114 &146511775
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 146511771}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Navigation:
+    m_Mode: 3
+    m_WrapAround: 0
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 1
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0.1
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
+    m_SelectedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_SelectedTrigger: Selected
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 146511773}
+  m_OnClick:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1563132267}
+        m_TargetAssemblyTypeName: Wood, Assembly-CSharp
+        m_MethodName: Confirm
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &147556263
 GameObject:
   m_ObjectHideFlags: 0
@@ -1823,8 +1896,12 @@ MonoBehaviour:
     - foodType: 0
       amount: 0
       remainingTime: 0
-    goldCount: 100
-    foodCount: 0
+    economyData:
+      gold: 0
+      food: 0
+      wood: 0
+      workers: 0
+    scheduledEvents: []
   saveFileName: GameSaveData.json
   _SaveGame: 0
   _LoadGame: 0
@@ -1863,7 +1940,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &457913249
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1965,13 +2042,13 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 72810019}
-        m_TargetAssemblyTypeName: TraverseTabs, Assembly-CSharp
-        m_MethodName: Activate
-        m_Mode: 3
+      - m_Target: {fileID: 72810020}
+        m_TargetAssemblyTypeName: BackButton, Assembly-CSharp
+        m_MethodName: OpenSubtab
+        m_Mode: 2
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
           m_IntArgument: 3
           m_FloatArgument: 0
           m_StringArgument: 
@@ -4553,7 +4630,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1087958715
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4655,13 +4732,13 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 72810019}
-        m_TargetAssemblyTypeName: TraverseTabs, Assembly-CSharp
-        m_MethodName: Activate
-        m_Mode: 3
+      - m_Target: {fileID: 72810020}
+        m_TargetAssemblyTypeName: BackButton, Assembly-CSharp
+        m_MethodName: OpenSubtab
+        m_Mode: 2
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
           m_IntArgument: 4
           m_FloatArgument: 0
           m_StringArgument: 
@@ -4971,6 +5048,7 @@ MonoBehaviour:
   sliderConstraints: {x: 10, y: 0}
   stepSize: 5
   foodTypes: 0
+  reducedTime: 0
 --- !u!114 &1165369982
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5747,12 +5825,12 @@ GameObject:
   - component: {fileID: 1412592680}
   - component: {fileID: 1412592682}
   m_Layer: 5
-  m_Name: Image (1)
+  m_Name: Wood Farming
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1412592679
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5854,13 +5932,13 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 72810019}
-        m_TargetAssemblyTypeName: TraverseTabs, Assembly-CSharp
-        m_MethodName: Activate
-        m_Mode: 3
+      - m_Target: {fileID: 72810020}
+        m_TargetAssemblyTypeName: BackButton, Assembly-CSharp
+        m_MethodName: OpenSubtab
+        m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgument: {fileID: 1563132265}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
           m_IntArgument: 2
           m_FloatArgument: 0
           m_StringArgument: 
@@ -6327,6 +6405,7 @@ MonoBehaviour:
   timer: 3.84
   addGold: 0
   gold: 0
+  workers: 0
   sendNumber: 1570
   senddd: 0
   sentAlert: 0
@@ -6537,6 +6616,7 @@ MonoBehaviour:
   goldCost: 0
   workerCost: 0
   timeCost: 0
+  amountOfWood: 0
   goldSliderConstraints: {x: 0, y: 241.3}
   workerSliderConstraints: {x: 0, y: 262.8}
   stepSize: 5
@@ -6623,22 +6703,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 72810019}
-        m_TargetAssemblyTypeName: TraverseTabs, Assembly-CSharp
-        m_MethodName: Activate
-        m_Mode: 3
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 444917725}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
+      - m_Target: {fileID: 72810020}
+        m_TargetAssemblyTypeName: BackButton, Assembly-CSharp
+        m_MethodName: CloseButton
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -6737,24 +6805,24 @@ MonoBehaviour:
     priceToPlant: 3
     priceToSell: 2
     conversionRatio: 5
-    timeToGrow: 8
+    timeToGrow: 2
   - type: 1
     priceToPlant: 4
     priceToSell: 3
     conversionRatio: 4
-    timeToGrow: 12
+    timeToGrow: 2.2
   - type: 2
     priceToPlant: 5
     priceToSell: 4
     conversionRatio: 3
-    timeToGrow: 16
+    timeToGrow: 2.6
   woodDataList:
   - type: 0
     purchasePrice: 4
-    timeToChop: 12
+    timeToChop: 4
   - type: 1
     purchasePrice: 8
-    timeToChop: 16
+    timeToChop: 6
   timeLogReductionStrength: 500
 --- !u!114 &1655737186
 MonoBehaviour:
@@ -6768,8 +6836,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 483a532fe2aab0647a1c1346f5011021, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gold: 0
-  food: 0
+  economyData:
+    gold: 0
+    food: 0
+    wood: 0
+    workers: 0
 --- !u!1 &1698061887
 GameObject:
   m_ObjectHideFlags: 0
@@ -8454,13 +8525,13 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 72810019}
-        m_TargetAssemblyTypeName: TraverseTabs, Assembly-CSharp
-        m_MethodName: Activate
-        m_Mode: 3
+      - m_Target: {fileID: 72810020}
+        m_TargetAssemblyTypeName: BackButton, Assembly-CSharp
+        m_MethodName: OpenSubtab
+        m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgument: {fileID: 444917725}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
           m_IntArgument: 1
           m_FloatArgument: 0
           m_StringArgument: 

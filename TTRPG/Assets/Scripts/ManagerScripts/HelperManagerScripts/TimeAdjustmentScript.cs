@@ -6,7 +6,7 @@ public static class TimeAdjustmentScript
     public static float Strength { get; set; } = 1f;
     public static Vector2 Power { get; set; } = new Vector2(1.8f, 2.3f);
 
-    public static double LogReduce(double value, float? strengthOverride = null)
+    public static double ReduceTime(double value, float? strengthOverride = null)
     {
         if (value <= 0) return 0;
 
@@ -19,11 +19,11 @@ public static class TimeAdjustmentScript
     }
 
     public static float LogReduce(float value)
-        => (float)LogReduce((double)value);
+        => (float)ReduceTime((double)value);
 
     public static int LogReduce(int value)
-        => (int)Math.Round(LogReduce((double)value));
+        => (int)Math.Round(ReduceTime((double)value));
 
     public static long LogReduce(long value)
-        => (long)Math.Round(LogReduce((double)value));
+        => (long)Math.Round(ReduceTime((double)value));
 }

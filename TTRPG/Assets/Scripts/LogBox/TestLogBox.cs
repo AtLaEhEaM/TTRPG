@@ -28,22 +28,31 @@ public class TestLogBox : MonoBehaviour
 
     private void Update()
     {
-        if(sentAlert)
+        if (sentAlert)
         {
-            LogBoxManager.instance.NewFarmerBox(type, plant, FoodTypes.Wheat, 0, 0);
+            LogBoxManager.instance.NewFarmerBox(
+                plant,                // plantation flag
+                FoodTypes.Wheat,      // crop type
+                0,                    // amount
+                0                     // grow time
+            );
             sentAlert = false;
         }
+
         if (sentMessage)
         {
-            LogBoxManager.instance.NewFarmerBox(type, plant, _type, amount, timer);
+            LogBoxManager.instance.NewFarmerBox(
+                plant,                // plantation flag
+                _type,                // crop type
+                amount,               // amount
+                timer                 // grow time
+            );
 
-            GameManager.instance.cropGrowthManager.GrowFood(_type, amount, timer);
-
-            sentMessage = false;
         }
+
         if (addGold)
         {
-            GameSavingManager.instance.saveData.workerCount += workers;
+            GameSavingManager.instance.saveData.economyData.workers += workers;
             addGold = false;
             GameManager.instance.economyManager.UpdateGold(gold);
             Debug.Log("saved gold");
@@ -54,7 +63,7 @@ public class TestLogBox : MonoBehaviour
             senddd = false;
             for (int i = 0; i < sendNumber; i++)
             {
-                LogBoxManager.instance.NewFarmerBox(type, plant, _type, amount, timer);
+                LogBoxManager.instance.NewFarmerBox(plant, _type, amount, timer);
 
                 GameManager.instance.cropGrowthManager.GrowFood(_type, amount, timer);
             }

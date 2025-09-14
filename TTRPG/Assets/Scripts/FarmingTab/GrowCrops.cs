@@ -1,6 +1,7 @@
 using System;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.UI;
 
 public class GrowCrops : MonoBehaviour
@@ -21,6 +22,8 @@ public class GrowCrops : MonoBehaviour
     public int crop { get; private set; }
     public float timeNeeded { get; private set; }
 
+    public float reducedTime;
+
     private void Awake()
     {
         if (costSlider != null) costSlider.wholeNumbers = true;
@@ -29,7 +32,7 @@ public class GrowCrops : MonoBehaviour
     private void Start()
     {
         GameSavingManager.instance.OnSaveDataLoadedEvent += LoadData;
-        GameManager.instance.economyManager.OnGoldUpdate += LoadData;
+        GameManager.instance.economyManager.OnEconomyUpdate += LoadData;
         if (costSlider != null) costSlider.onValueChanged.AddListener(SnapSlider);
     }
 
@@ -45,7 +48,7 @@ public class GrowCrops : MonoBehaviour
     private void LoadData()
     {
         sliderConstraints.x = 10f;
-        sliderConstraints.y = GameSavingManager.instance.saveData.goldCount;
+        sliderConstraints.y = GameSavingManager.instance.saveData.economyData.gold;
 
         ApplySliderConstraintsAndSnap();
     }
@@ -105,8 +108,9 @@ public class GrowCrops : MonoBehaviour
         if (goldText != null) goldText.text = $"Gold: {gold}";
         if (cropText != null) cropText.text = $"Crops: {crop}";
 
-        float dispTime = Mathf.Max(1, timeNeeded / 60f); // log-reduced, in minutes
-        if (timeText != null) timeText.text = $"Time: {dispTime:F1}m";
+        reducedTime = TimeAdjustmentScript.LogReduce(timeNeeded);
+        
+        if (timeText != null) timeText.text = $"Time: {reducedTime:F1}m";
     }
 
     public void SetFoodType(string foodType)
@@ -120,14 +124,14 @@ public class GrowCrops : MonoBehaviour
 
     public void Confirm()
     {
-        if (GameManager.instance.economyManager.gold < gold)
+        if (GameManager.instance.economyManager.economyData.gold < gold)
             return;
 
         GameManager.instance.economyManager.UpdateGold(-gold);
 
         // use the already log-reduced timeNeeded
-        LogBoxManager.instance.NewFarmerBox(LogBoxType.Farm, true, foodTypes, crop, timeNeeded);
-        GameManager.instance.cropGrowthManager.GrowFood(foodTypes, crop, timeNeeded);
+        LogBoxManager.instance.NewFarmerBox(true, foodTypes, crop, reducedTime);
+        GameManager.instance.cropGrowthManager.GrowFood(foodTypes, crop, reducedTime);
 
         GameSavingManager.instance.SaveGame();
     }

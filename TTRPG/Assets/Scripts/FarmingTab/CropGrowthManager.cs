@@ -54,12 +54,12 @@ public class FoodGrowthManager : MonoBehaviour
         foodData.remainingTime = 0f;
 
         LogBoxManager.instance.NewFarmerBox(
-            LogBoxType.Farm,
             false,
             foodData.foodType,
             foodData.amount,
-            foodData.remainingTime
+            0f 
         );
+
 
         GameManager.instance.economyManager.UpdateFood(foodData.amount);
 
