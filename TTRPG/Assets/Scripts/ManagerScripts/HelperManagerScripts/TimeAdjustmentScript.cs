@@ -6,16 +6,19 @@ public static class TimeAdjustmentScript
     public static float Strength { get; set; } = 1f;
     public static Vector2 Power { get; set; } = new Vector2(1.8f, 2.3f);
 
-    public static double ReduceTime(double value, float? strengthOverride = null)
+    private static double a = 20;
+    private static double b = 3;
+    private static double c = 0.2;
+    private static double d = 9;
+
+    public static double ReduceTime(double value)
     {
-        if (value <= 0) return 0;
+        double g = b * (1 - Math.Pow(1 - (value / a), d));
+        double h = c * value;
 
-        float strength = strengthOverride ?? Strength;
+        double finalVal = value < a ? g + h : b * (1 - Math.Pow(1 - 1, d)) + h;
 
-        float reduction = MathF.Pow((float)value, Power.X / Power.Y);
-        //double reducedValue = value - reduction;
-
-        return Math.Max(0, (double)reduction);
+        return Math.Round(Math.Max(0, finalVal), 2);
     }
 
     public static float LogReduce(float value)

@@ -1,4 +1,5 @@
 using Unity.VisualScripting;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class TestLogBox : MonoBehaviour
@@ -21,6 +22,8 @@ public class TestLogBox : MonoBehaviour
     [Header("Send Logic")]
     public int sendNumber;
     public bool senddd = false;
+
+    public List<MineralData> dataa = new();
 
     [Header("Alerts & Messages")]
     public bool sentAlert = false;
@@ -61,12 +64,20 @@ public class TestLogBox : MonoBehaviour
         if (senddd)
         {
             senddd = false;
-            for (int i = 0; i < sendNumber; i++)
-            {
-                LogBoxManager.instance.NewFarmerBox(plant, _type, amount, timer);
+            //for (int i = 0; i < sendNumber; i++)
+            //{
+            //    LogBoxManager.instance.NewFarmerBox(plant, _type, amount, timer);
 
-                GameManager.instance.cropGrowthManager.GrowFood(_type, amount, timer);
-            }
+            //    GameManager.instance.cropGrowthManager.GrowFood(_type, amount, timer);
+            //}
+
+            MiningTrip trip = new();
+            trip.caveLayer = 2;
+            trip.mineralsMineableList = dataa;
+            trip.timeStarted = 4;
+            trip.workers = workers;
+
+            MiningManager.instance.AddTrip(trip);
         }
     }
 }

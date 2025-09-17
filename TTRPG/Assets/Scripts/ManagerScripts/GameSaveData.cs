@@ -5,10 +5,11 @@ using UnityEngine;
 [Serializable]
 public class GameSaveData
 {
-    public List<LogBoxData> logBoxDataList = new List<LogBoxData>();
-    public List<LoadFoodData> foodDataList = new List<LoadFoodData>();
+    public List<LogBoxData> logBoxDataList = new();
+    public List<LoadFoodData> foodDataList = new();
     public EconomyData economyData = new();
-    public List<SavedEventData> scheduledEvents = new List<SavedEventData>();
+    public List<SavedEventData> scheduledEvents = new();
+    public List<MineralSaveData> mineralSaveDataList = new();
 }
 
 [Serializable]

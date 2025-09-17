@@ -42,6 +42,8 @@ public class TimeEventScheduler : MonoBehaviour
 
     public void ScheduleEvent(string id, TimeSpan duration, Action onComplete)
     {
+        duration *= 60f;
+
         var ev = new TimedEventData
         {
             id = id,

@@ -6,6 +6,8 @@ public class GameEconomyManager : MonoBehaviour
     public EconomyData economyData = new();
 
     public event Action OnEconomyUpdate;
+    public event Action OnMineralsUpdate;
+
 
     public void Start()
     {
@@ -17,6 +19,8 @@ public class GameEconomyManager : MonoBehaviour
         economyData = GameSavingManager.instance.saveData.economyData;
         OnEconomyUpdate?.Invoke();
     }
+
+
 
     public void UpdateGold(int _gold)
     {
@@ -34,6 +38,24 @@ public class GameEconomyManager : MonoBehaviour
         GameSavingManager.instance.SaveGame();
 
         OnEconomyUpdate?.Invoke();
+    }
+
+    public void UpdateMinerals(MineralTypes type, int amount)
+    {
+        var list = GameSavingManager.instance.saveData.mineralSaveDataList;
+
+        var item = list.Find(m => m.type == type);
+        if (item != null)
+        {
+            item.amount += amount;
+        }
+        else
+        {
+            list.Add(new MineralSaveData { type = type, amount = amount });
+        }
+
+        GameSavingManager.instance.SaveGame();
+        OnMineralsUpdate?.Invoke();
     }
 
     public void UpdateWood(int _wood)
@@ -63,3 +85,4 @@ public class EconomyData
     public int wood;
     public int workers;
 }
+
