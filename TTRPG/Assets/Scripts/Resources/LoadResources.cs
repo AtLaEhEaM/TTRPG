@@ -21,9 +21,16 @@ public class LoadResources : MonoBehaviour
         amountDisplay[1].text = GameSavingManager.instance.saveData.economyData.food.ToString();
         amountDisplay[2].text = GameSavingManager.instance.saveData.economyData.wood.ToString();
         amountDisplay[3].text = GameSavingManager.instance.saveData.economyData.workers.ToString();
+        //amountDisplay[4].text = GameSavingManager.instance.saveData.mineralSaveDataList;
 
-        //amountDisplay[0].text = GameSavingManager.instance.saveData.goldCount.ToString();
-        //amountDisplay[0].text = GameSavingManager.instance.saveData.goldCount.ToString();
+        int i = 4;
+        int j = 0;
+        foreach(var resource in GameSavingManager.instance.saveData.mineralSaveDataList)
+        {
+            amountDisplay[i].text = resource.amount.ToString();
+            i++;
+            j++;
+        }
 
     }
 }

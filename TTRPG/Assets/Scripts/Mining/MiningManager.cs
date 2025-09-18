@@ -42,7 +42,6 @@ public class MiningManager : MonoBehaviour
         {
             int chance = UnityEngine.Random.Range(0, 100);
 
-            // If this trip fails the initial cave layer roll, skip it but keep checking others
             if (chance < trip.caveLayer * 10)
                 continue;
 
@@ -52,10 +51,12 @@ public class MiningManager : MonoBehaviour
 
                 if (chance < data.rarityChance)
                 {
-                    // Controlled growth formula: workers * log(caveLayer + 1)
-                    int amount = Mathf.FloorToInt(trip.workers * Mathf.Log(trip.caveLayer + 1, 2));
+                    //Debug.Log("hello from the abyss");
+                    int _layer = trip.caveLayer + 1;
+                    int amount = Mathf.FloorToInt(Mathf.Pow(trip.workers, _layer));
 
                     amount = (int)TimeAdjustmentScript.ReduceTime(amount);
+                    Debug.Log("amount: " + amount + " Layer: " + _layer + " workers: " + trip.workers);
 
                     if (amount > 0)
                         GameManager.instance.economyManager.UpdateMinerals(data.type, amount);

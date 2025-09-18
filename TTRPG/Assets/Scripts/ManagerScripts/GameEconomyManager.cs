@@ -43,14 +43,19 @@ public class GameEconomyManager : MonoBehaviour
     public void UpdateMinerals(MineralTypes type, int amount)
     {
         var list = GameSavingManager.instance.saveData.mineralSaveDataList;
+        Debug.Log("hello from the abyssss1");
+
 
         var item = list.Find(m => m.type == type);
         if (item != null)
         {
+            Debug.Log("hello from the abyssss2");
+
             item.amount += amount;
         }
         else
         {
+            Debug.Log("hello from the abyssss");
             list.Add(new MineralSaveData { type = type, amount = amount });
         }
 

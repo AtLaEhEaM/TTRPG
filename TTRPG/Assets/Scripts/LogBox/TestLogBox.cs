@@ -75,6 +75,7 @@ public class TestLogBox : MonoBehaviour
             trip.caveLayer = 2;
             trip.mineralsMineableList = dataa;
             trip.timeStarted = 4;
+            trip.caveLayer = 2;
             trip.workers = workers;
 
             MiningManager.instance.AddTrip(trip);
