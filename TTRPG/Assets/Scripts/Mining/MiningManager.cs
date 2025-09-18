@@ -22,10 +22,8 @@ public class MiningManager : MonoBehaviour
         instance = this;
     }
 
-    public void AddTrip(MiningTrip trip)
-    {
-        miningList.Add(trip);
-    }
+    public void AddTrip(MiningTrip trip) => miningList.Add(trip);
+    
 
     private void Update()
     {
