@@ -29,8 +29,30 @@ public class TestLogBox : MonoBehaviour
     public bool sentAlert = false;
     public bool sentMessage = false;
 
+    public bool caveevent = false;
+    public bool goodevent = false;
+
     private void Update()
     {
+        if (caveevent)
+        {
+            caveevent = false;
+
+            MiningTrip trip = new();
+            trip.caveLayer = 2;
+            trip.mineralsMineableList = dataa;
+            trip.timeStarted = 4;
+            trip.caveLayer = 2;
+            trip.workers = workers;
+
+            MiningManager.instance.AddTrip(trip);
+
+            if (goodevent)
+                GameManager.instance.miningEvents.GoodEvent(trip, trip.timeStarted);
+            else
+                GameManager.instance.miningEvents.BadEvent(trip, trip.timeStarted);
+        }
+
         if (sentAlert)
         {
             LogBoxManager.instance.NewFarmerBox(

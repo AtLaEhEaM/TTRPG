@@ -117,14 +117,11 @@ public class Wood : MonoBehaviour
 
         if (data != null && data.timeToChop > 0 && workerCost > 0 && goldCost > 0)
         {
-            // Calculate wood
             float typeFactor = (type == WoodType.Oak ? 2f : 3f);
             amountOfWood = ((workerCost / 2f) * (goldCost / 4f) * typeFactor) * amountMultiplier;
 
-            // Calculate time
             timeCost = (data.timeToChop * amountOfWood / (workerCost * goldCost)) * timeMultiplier;
 
-            // Apply logarithmic adjustment
             timeCost = TimeAdjustmentScript.LogReduce(timeCost * 2);
         }
         else
@@ -136,34 +133,19 @@ public class Wood : MonoBehaviour
         Debug.Log($"Wood: {type}, Gold: {goldCost}, Workers: {workerCost}, Time: {timeCost:F2}, Amount: {amountOfWood:F2}");
     }
 
-    // ---------------- Buttons for quick testing ----------------
-
-    [ContextMenu("+ Gold")]
-    private void AddGoldStep()
+    public void ChangeWoodType(string _name)
     {
-        goldSlider.value = Mathf.Clamp(goldSlider.value + stepSize, goldSlider.minValue, goldSlider.maxValue);
-        UpdateValues();
-    }
-
-    [ContextMenu("- Gold")]
-    private void SubGoldStep()
-    {
-        goldSlider.value = Mathf.Clamp(goldSlider.value - stepSize, goldSlider.minValue, goldSlider.maxValue);
-        UpdateValues();
-    }
-
-    [ContextMenu("+ Workers")]
-    private void AddWorkerStep()
-    {
-        workerSlider.value = Mathf.Clamp(workerSlider.value + stepSize, workerSlider.minValue, workerSlider.maxValue);
-        UpdateValues();
-    }
-
-    [ContextMenu("- Workers")]
-    private void SubWorkerStep()
-    {
-        workerSlider.value = Mathf.Clamp(workerSlider.value - stepSize, workerSlider.minValue, workerSlider.maxValue);
-        UpdateValues();
+        foreach (WoodType _type in Enum.GetValues(typeof(WoodType)))
+        {
+            if (_type.ToString() == _name)
+            {
+                type = _type;
+                UpdateValues();
+                return;
+            }
+            else
+                continue;
+        }
     }
 }
 

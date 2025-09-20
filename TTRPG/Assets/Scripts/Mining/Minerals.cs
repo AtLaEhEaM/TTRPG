@@ -11,7 +11,7 @@ public class Minerals : MiningManager
 public class MiningTrip
 {
     public int workers;
-    public int timeStarted;
+    public long timeStarted;
     public int caveLayer;
     public List<MineralData> mineralsMineableList;
 }

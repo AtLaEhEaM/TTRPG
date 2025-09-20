@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 
 public class MiningManager : MonoBehaviour
@@ -7,7 +8,7 @@ public class MiningManager : MonoBehaviour
     public static MiningManager instance;
 
     [Header("Mining Settings")]
-    public float tickInterval = 16f; 
+    public float tickInterval = 4f; // run every 4 seconds
     private float tickTimer = 0f;
 
     public List<MiningTrip> miningList = new();
@@ -22,8 +23,28 @@ public class MiningManager : MonoBehaviour
         instance = this;
     }
 
-    public void AddTrip(MiningTrip trip) => miningList.Add(trip);
-    
+    private void Start()
+    {
+        GameSavingManager.instance.OnSaveDataLoadedEvent += LoadData;
+    }
+
+    void LoadData()
+    {
+        if (GameSavingManager.instance.saveData.miningTripsList == null)
+            return;
+
+        foreach (MiningTrip trip in GameSavingManager.instance.saveData.miningTripsList)
+            AddTrip(trip);
+    }
+
+    public void AddTrip(MiningTrip trip)
+    {
+        trip.timeStarted = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+        miningList.Add(trip);
+
+        GameSavingManager.instance.saveData.miningTripsList.Add(trip);
+        GameSavingManager.instance.SaveGame();
+    }
 
     private void Update()
     {
@@ -38,30 +59,65 @@ public class MiningManager : MonoBehaviour
 
     private void ProcessMiningTrips()
     {
+        long currentTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+
         foreach (MiningTrip trip in miningList)
         {
-            int chance = UnityEngine.Random.Range(0, 100);
+            CheckForEvent(trip, currentTime);
+            TryMineTrip(trip);
+        }
+    }
 
-            if (chance < trip.caveLayer * 10)
-                continue;
+    private void CheckForEvent(MiningTrip trip, long currentTime) //random chance of rolling an event for mining, may be good or bad
+    {
+        long elapsed = currentTime - trip.timeStarted;
+        int requiredTime = 120;
 
-            foreach (MineralData data in trip.mineralsMineableList)
+        int _chanceOfEvent = UnityEngine.Random.Range(0, 10);
+
+        if (elapsed >= requiredTime)
+        {
+            if (_chanceOfEvent <= 4)
             {
-                chance = UnityEngine.Random.Range(0, 100);
+                _chanceOfEvent = UnityEngine.Random.Range(0, 10);
 
-                if (chance < data.rarityChance)
-                {
-                    //Debug.Log("hello from the abyss");
-                    int _layer = trip.caveLayer + 1;
-                    int amount = Mathf.FloorToInt(Mathf.Pow(trip.workers, _layer));
-
-                    amount = (int)TimeAdjustmentScript.ReduceTime(amount);
-                    Debug.Log("amount: " + amount + " Layer: " + _layer + " workers: " + trip.workers);
-
-                    if (amount > 0)
-                        GameManager.instance.economyManager.UpdateMinerals(data.type, amount);
-                }
+                if (_chanceOfEvent <= 4)
+                    GameManager.instance.miningEvents.GoodEvent(trip, currentTime);
+                else
+                    GameManager.instance.miningEvents.BadEvent(trip, currentTime);
             }
+        }
+    }
+
+    private void TryMineTrip(MiningTrip trip)
+    {
+        int roll = UnityEngine.Random.Range(0, 100);
+
+        if (roll < trip.caveLayer * 10)
+            return;
+
+        foreach (MineralData data in trip.mineralsMineableList)
+        {
+            MineMineral(trip, data);
+        }
+    }
+
+    private void MineMineral(MiningTrip trip, MineralData data)
+    {
+        int roll = UnityEngine.Random.Range(0, 100);
+
+        if (roll >= data.rarityChance)
+            return;
+
+        int layer = trip.caveLayer + 1;
+        int amount = Mathf.FloorToInt(Mathf.Pow(trip.workers, layer));
+
+        amount = (int)TimeAdjustmentScript.ReduceTime(amount);
+
+        if (amount > 0)
+        {
+            Debug.Log($"Trip mined {amount} {data.type} at layer {layer} with {trip.workers} workers");
+            GameManager.instance.economyManager.UpdateMinerals(data.type, amount);
         }
     }
 }

@@ -10,6 +10,7 @@ public class GameSaveData
     public EconomyData economyData = new();
     public List<SavedEventData> scheduledEvents = new();
     public List<MineralSaveData> mineralSaveDataList = new();
+    public List<MiningTrip> miningTripsList = new();
 }
 
 [Serializable]

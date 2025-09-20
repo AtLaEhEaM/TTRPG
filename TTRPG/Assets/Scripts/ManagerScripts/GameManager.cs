@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour
     public List<WoodData> woodDataList = new List<WoodData>();
     public float timeLogReductionStrength = 10f;
 
+    public MiningEvents miningEvents;
     public void Awake()
     {
         instance = this;

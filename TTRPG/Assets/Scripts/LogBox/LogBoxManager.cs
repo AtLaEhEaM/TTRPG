@@ -81,6 +81,11 @@ public class LogBoxManager : MonoBehaviour
         CreateLogBox(LogBoxType.TreePlantation, finalString);
     }
 
+    public void NewBox(LogBoxType boxType, string message)
+    {
+        CreateLogBox(boxType, message);
+    }
+
     void ApplyBoxData(GameObject box, LogBoxData data)
     {
         box.GetComponent<TextMeshProUGUI>().text = data.text;
@@ -91,6 +96,7 @@ public class LogBoxManager : MonoBehaviour
 public enum LogBoxType
 {
     Farm,
+    Mining,
     Army,
     Scout,
     TreePlantation, 
@@ -102,3 +108,26 @@ public class LogBoxData
     public string text;
     public LogBoxType type;
 }
+
+/*Name	Hex Code	Example in TMP
+White	#FFFFFF	<color=#FFFFFF>White</color>
+Black	#000000	<color=#000000>Black</color>
+Red	#FF0000	<color=#FF0000>Red</color>
+Green	#00FF00	<color=#00FF00>Green</color>
+Blue	#0000FF	<color=#0000FF>Blue</color>
+Yellow	#FFFF00	<color=#FFFF00>Yellow</color>
+Cyan	#00FFFF	<color=#00FFFF>Cyan</color>
+Magenta	#FF00FF	<color=#FF00FF>Magenta</color>
+Orange	#FFA500	<color=#FFA500>Orange</color>
+Purple	#800080	<color=#800080>Purple</color>
+Pink	#FFC0CB	<color=#FFC0CB>Pink</color>
+Gray	#808080	<color=#808080>Gray</color>
+LightGray	#D3D3D3	<color=#D3D3D3>Light Gray</color>
+DarkGray	#A9A9A9	<color=#A9A9A9>Dark Gray</color>
+Brown	#A52A2A	<color=#A52A2A>Brown</color>
+Gold	#FFD700	<color=#FFD700>Gold</color>
+Silver	#C0C0C0	<color=#C0C0C0>Silver</color>
+Lime	#32CD32	<color=#32CD32>Lime</color>
+Teal	#008080	<color=#008080>Teal</color>
+Navy	#000080	<color=#000080>Navy</color>
+*/
