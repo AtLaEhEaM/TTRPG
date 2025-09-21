@@ -40,6 +40,10 @@ public class MiningEvents : MonoBehaviour
             if (chance < successThreshold)
             {
                 trip.caveLayer++;
+
+                if (trip.caveLayer > GameSavingManager.instance.saveData.maxMiningLayer)
+                    GameSavingManager.instance.saveData.maxMiningLayer = trip.caveLayer;
+
                 trip.timeStarted = (int)currentTime;
                 Debug.Log($"Trip advanced to layer {trip.caveLayer}");
             }

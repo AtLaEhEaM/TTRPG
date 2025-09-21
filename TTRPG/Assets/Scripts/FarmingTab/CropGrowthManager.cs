@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading;
 using UnityEngine;
 
@@ -15,10 +16,15 @@ public class FoodGrowthManager : MonoBehaviour
             GameSavingManager.instance.OnSaveDataLoadedEvent -= LoadData;
     }
 
-    // When loading game, resume all crops
     private void LoadData()
     {
-        foreach (var food in GameSavingManager.instance.saveData.foodDataList)
+        var savedFoods = GameSavingManager.instance.saveData.foodDataList;
+        if (savedFoods == null || savedFoods.Count == 0)
+            return;
+
+        var foodsCopy = savedFoods.ToList();
+
+        foreach (var food in foodsCopy)
         {
             TimeEventScheduler.instance.ResumeEvent(
                 $"food_{food.foodType}_{Guid.NewGuid()}",

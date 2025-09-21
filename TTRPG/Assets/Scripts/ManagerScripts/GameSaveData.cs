@@ -11,6 +11,7 @@ public class GameSaveData
     public List<SavedEventData> scheduledEvents = new();
     public List<MineralSaveData> mineralSaveDataList = new();
     public List<MiningTrip> miningTripsList = new();
+    public int maxMiningLayer = 0;
 }
 
 [Serializable]

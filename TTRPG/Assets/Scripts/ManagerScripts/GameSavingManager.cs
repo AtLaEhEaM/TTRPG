@@ -47,9 +47,13 @@ public class GameSavingManager : MonoBehaviour
             LoadGame();
             _LoadLastSave = false;
         }
-    }
+        if (Input.GetKeyDown(KeyCode.T))
+        {
+            OnSaveDataLoadedEvent?.Invoke();
+        }
+}
 
-    private IEnumerator Start()
+private IEnumerator Start()
     {
         yield return new WaitForSeconds(0.1f);
         LoadGame();

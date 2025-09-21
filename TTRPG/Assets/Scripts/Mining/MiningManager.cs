@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -30,11 +31,18 @@ public class MiningManager : MonoBehaviour
 
     void LoadData()
     {
-        if (GameSavingManager.instance.saveData.miningTripsList == null)
+        var savedTrips = GameSavingManager.instance.saveData.miningTripsList;
+        if (savedTrips == null || savedTrips.Count == 0)
             return;
 
-        foreach (MiningTrip trip in GameSavingManager.instance.saveData.miningTripsList)
+        //Debug.Log("mining manager save " + savedTrips.Count);
+
+        var tripsCopy = savedTrips.ToList();
+
+        foreach (var trip in tripsCopy)
+        {
             AddTrip(trip);
+        }
     }
 
     public void AddTrip(MiningTrip trip)
