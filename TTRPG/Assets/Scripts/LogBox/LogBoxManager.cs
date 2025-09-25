@@ -99,6 +99,7 @@ public enum LogBoxType
     Mining,
     Army,
     Scout,
+    Construction,
     TreePlantation, 
 }
 
