@@ -463,6 +463,7 @@
 "Assets/Scripts/Mining/MiningEvents.cs"
 "Assets/Scripts/Mining/MiningManager.cs"
 "Assets/Scripts/Population/BuildHouses.cs"
+"Assets/Scripts/Population/DisplayPopulation.cs"
 "Assets/Scripts/Population/PopulationManager.cs"
 "Assets/Scripts/Resources/LoadResources.cs"
 "Assets/Scripts/Resources/ResourceData.cs"

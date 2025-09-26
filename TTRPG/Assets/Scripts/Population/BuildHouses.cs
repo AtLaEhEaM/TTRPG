@@ -120,7 +120,7 @@ public class BuildHouses : MonoBehaviour
         );
 
         LogBoxManager.instance.NewBox(LogBoxType.Construction,
-            $"Started construction of {houseCount} houses.<br>" +
+            $"Started construction of {houseCount} {houseType} houses.<br>" +
             $"Construction will be completed in {totalTime} minutes!"
             );
 
@@ -129,6 +129,9 @@ public class BuildHouses : MonoBehaviour
 
     private void CompleteBuild(int count, HouseTypes type)
     {
+        //if(type == HouseTypes.Small)
+
+        // else
 
     }
 
