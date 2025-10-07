@@ -2857,10 +2857,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   saveData:
     logBoxDataList: []
-    foodDataList:
-    - foodType: 0
-      amount: 0
-      remainingTime: 0
+    foodDataList: []
     economyData:
       gold: 0
       food: 0
@@ -2876,12 +2873,13 @@ MonoBehaviour:
       amount: 0
     miningTripsList: []
     populationData:
-      totalPop: 0
+      maxPop: 0
       currentPop: 0
       childrenPop: 0
       armyPop: 0
       workersPop: 0
     maxMiningLayer: 0
+    lastSavedTime: 
   saveFileName: GameSaveData.json
   _SaveGame: 0
   _LoadGame: 0
@@ -4387,6 +4385,52 @@ RectTransform:
   m_AnchoredPosition: {x: -5, y: 0}
   m_SizeDelta: {x: -20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &682740439
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 682740440}
+  - component: {fileID: 682740441}
+  m_Layer: 0
+  m_Name: PopulationManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &682740440
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 682740439}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1975307412}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &682740441
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 682740439}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04cec26056015b641aa65254f0e2ef07, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  popIncreasePerMin: 2
+  testPing: 0
 --- !u!1 &690018864
 GameObject:
   m_ObjectHideFlags: 0
@@ -6331,7 +6375,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   populationData:
-    totalPop: 0
+    maxPop: 0
     currentPop: 0
     childrenPop: 0
     armyPop: 0
@@ -8087,7 +8131,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4124c0b521778ad4c9c8ca1d4df7a02b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tickInterval: 1
+  tickInterval: 16
   miningList: []
 --- !u!1 &1397449856
 GameObject:
@@ -10754,6 +10798,7 @@ Transform:
   - {fileID: 1655737184}
   - {fileID: 832253071}
   - {fileID: 1389383808}
+  - {fileID: 682740440}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1989438007

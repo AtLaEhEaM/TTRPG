@@ -101,6 +101,7 @@ public enum LogBoxType
     Scout,
     Construction,
     TreePlantation, 
+    Alert,
 }
 
 [Serializable]

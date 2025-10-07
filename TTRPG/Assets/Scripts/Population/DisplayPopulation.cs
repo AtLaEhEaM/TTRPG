@@ -10,6 +10,7 @@ public class DisplayPopulation : MonoBehaviour
     public void Start()
     {
         GameSavingManager.instance.OnSaveDataLoadedEvent += LoadData;
+        PopulationManager.instance.OnPopUpdate += DisplayData;
     }
 
     void LoadData()
@@ -20,8 +21,7 @@ public class DisplayPopulation : MonoBehaviour
 
     void DisplayData()
     {
-
-        displayInfoTexts[0].text = $"{populationData.currentPop.ToString()} / {populationData.totalPop.ToString()}";
+        displayInfoTexts[0].text = $"{populationData.currentPop.ToString()} / {populationData.maxPop.ToString()}";
         displayInfoTexts[1].text = $"{populationData.armyPop.ToString()}";
         displayInfoTexts[2].text = $"{populationData.workersPop.ToString()}";
         displayInfoTexts[3].text = $"{populationData.childrenPop.ToString()}";

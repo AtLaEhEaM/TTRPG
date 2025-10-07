@@ -13,6 +13,7 @@ public class GameSaveData
     public List<MiningTrip> miningTripsList = new();
     public PopulationData populationData = new();
     public int maxMiningLayer = 0;
+    public string lastSavedTime;
 }
 
 [Serializable]

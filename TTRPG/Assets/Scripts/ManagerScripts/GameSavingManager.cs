@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class GameSavingManager : MonoBehaviour
@@ -88,6 +89,8 @@ private IEnumerator Start()
         string json = JsonUtility.ToJson(saveData, true);
 
         File.WriteAllText(saveFilePath, json);
+
+        saveData.lastSavedTime = DateTime.Now.Minute.ToString();
         Debug.Log("Game saved to: " + saveFilePath);
     }
 
