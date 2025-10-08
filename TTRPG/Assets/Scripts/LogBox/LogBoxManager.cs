@@ -13,6 +13,7 @@ public class LogBoxManager : MonoBehaviour
     public FarmerLogs farmerLogs = new();
     public TreePlantationLogs treeLogs = new();
     public List<LogBoxData> boxes = new();
+    private bool AlertReceived = false;
 
     public static LogBoxManager instance;
 
