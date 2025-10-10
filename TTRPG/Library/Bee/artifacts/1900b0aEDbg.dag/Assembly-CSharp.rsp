@@ -472,6 +472,8 @@
 "Assets/Scripts/Testing/AddResources.cs"
 "Assets/Scripts/Timber/Wood.cs"
 "Assets/Scripts/Timber/WoodMessageSend.cs"
+"Assets/Scripts/Town/CreateGraphTest.cs"
+"Assets/Scripts/Town/TownManager.cs"
 "Assets/Scripts/UI management/BackButton.cs"
 -langversion:9.0
 /deterministic
