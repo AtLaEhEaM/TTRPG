@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using Unity.Mathematics;
 
 public class TownManager : MonoBehaviour
 {
@@ -18,6 +19,11 @@ public class TownManager : MonoBehaviour
     public int maxPlacementAttempts = 20;
     public float redNodeAreaThreshold = 4f;
     public int maxConnections = 3;
+    public int hexNodeConnection = 2;
+
+    [Header("Graphics")]
+    public GameObject roadPrefab;
+    public int roadWidth = 4;
 
     [Header("Graph Data (runtime view only)")]
     private List<Node> nodes = new List<Node>();
@@ -68,7 +74,7 @@ public class TownManager : MonoBehaviour
             graphParent = parentGO.transform;
         }
 
-        GenerateHexBase();
+        //GenerateHexBase();
     }
 
     void OnDrawGizmos()
@@ -93,7 +99,7 @@ public class TownManager : MonoBehaviour
             float angle = i * angleStep * Mathf.Deg2Rad;
             Vector2 pos = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)) * ringRadius;
 
-            Node n = CreateNode(pos, 1f, Color.white, 2, false, false);
+            Node n = CreateNode(pos, 1f, Color.white, hexNodeConnection, false, false);
 
             CreateEdge(prime, n);
             if (i > 0) CreateEdge(n, nodes[nodes.Count - 2]);
@@ -101,7 +107,7 @@ public class TownManager : MonoBehaviour
         }
     }
 
-    Node CreateNode(Vector2 pos, float area, Color color, int expansionSlots, bool isPrime, bool isLocked)
+    public Node CreateNode(Vector2 pos, float area, Color color, int expansionSlots, bool isPrime, bool isLocked)
     {
         GameObject go = Instantiate(nodePrefab, pos, Quaternion.identity);
         go.transform.localScale = Vector3.one * nodeScale;
@@ -123,15 +129,42 @@ public class TownManager : MonoBehaviour
         return node;
     }
 
-    void CreateEdge(Node a, Node b)
+    public void CreateEdge(Node a, Node b)
     {
-        if (a == null || b == null) return;
-        if (EdgeExists(a, b)) return;
+        if (a == null || b == null || EdgeExists(a, b)) return;
 
         edges.Add(new Edge(a, b));
         a.neighbors.Add(b);
         b.neighbors.Add(a);
+
+        if (roadPrefab != null)
+        {
+            Vector2 mid = (a.Pos + b.Pos) * 0.5f;
+            Vector2 dir = (b.Pos - a.Pos);
+            float length = dir.magnitude;
+
+            GameObject road = Instantiate(roadPrefab, mid, Quaternion.identity, graphParent);
+
+            // Rotate to face connection direction (+90° for vertical-aligned sprites)
+            float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+            road.transform.rotation = Quaternion.Euler(0, 0, angle + 90f);
+
+            // Scale the road along its Y-axis instead of X
+            var sr = road.GetComponent<SpriteRenderer>();
+            if (sr != null)
+            {
+                float spriteLength = sr.sprite.bounds.size.y; // note: Y now used
+                float spriteWidth = sr.sprite.bounds.size.x;
+                road.transform.localScale = new Vector3(roadWidth / spriteWidth, length / spriteLength, 1f);
+            }
+            else
+            {
+                // fallback scaling
+                road.transform.localScale = new Vector3(roadWidth, length, 1f);
+            }
+        }
     }
+
 
     bool EdgeExists(Node a, Node b)
     {
@@ -205,12 +238,12 @@ public class TownManager : MonoBehaviour
     public bool AddRandomExpansionNode(float sizeX)
     {
         var candidates = GetCandidateEdges()
-            .OrderBy(e => Random.value * (1f / (1f + EdgeMidpoint(e).magnitude)))
+            .OrderBy(e => UnityEngine.Random.value * (1f / (1f + EdgeMidpoint(e).magnitude)))
             .ToList();
 
         if (candidates.Count == 0) return false;
 
-        int startIndex = Random.Range(0, candidates.Count);
+        int startIndex = UnityEngine.Random.Range(0, candidates.Count);
         for (int i = 0; i < candidates.Count; i++)
         {
             Edge chosen = candidates[(startIndex + i) % candidates.Count];
@@ -219,7 +252,7 @@ public class TownManager : MonoBehaviour
 
             for (int attempt = 0; attempt < maxPlacementAttempts; attempt++)
             {
-                float rndDeg = Random.Range(-edgeOffsetRandomnessDeg, edgeOffsetRandomnessDeg);
+                float rndDeg = UnityEngine.Random.Range(-edgeOffsetRandomnessDeg, edgeOffsetRandomnessDeg);
                 Vector2 rotated = Rotate(baseNormal, rndDeg);
                 Vector2 pos = mid + rotated * sizeX;
 
@@ -234,7 +267,11 @@ public class TownManager : MonoBehaviour
                 chosen.b.expansionSlots = Mathf.Max(0, chosen.b.expansionSlots - 1);
 
                 if (newNode.area >= redNodeAreaThreshold)
+                {
                     SpawnRedLockedNode(newNode, chosen.a, chosen.b);
+                    ConnectOrInsertBetweenAdjacent(chosen.a, 1.5f, 4f);
+                    ConnectOrInsertBetweenAdjacent(chosen.b, 1.5f, 4f);
+                }
 
                 return true;
             }
@@ -265,7 +302,42 @@ public class TownManager : MonoBehaviour
     [ContextMenu("Add Random Expansion (auto size)")]
     public void ContextAddRandom()
     {
-        float sizeX = Random.Range(size.x, size.y);
+        float sizeX = UnityEngine.Random.Range(size.x, size.y);
         AddRandomExpansionNode(sizeX);
     }
+
+    void ConnectOrInsertBetweenAdjacent(Node hexNode, float minDistance, float maxDistance)
+    {
+        if (hexNode == null || hexNode.neighbors.Count < 2)
+            return;
+
+        // Get leftmost and rightmost neighbors (by angle around the hex node)
+        var sortedNeighbors = hexNode.neighbors
+            .OrderBy(n =>
+            {
+                Vector2 dir = (n.Pos - hexNode.Pos).normalized;
+                return Mathf.Atan2(dir.y, dir.x);
+            }).ToList();
+
+        for (int i = 0; i < sortedNeighbors.Count - 1; i++)
+        {
+            Node left = sortedNeighbors[i];
+            Node right = sortedNeighbors[i + 1];
+            float dist = Vector2.Distance(left.Pos, right.Pos);
+
+            if (dist < minDistance)
+            {
+                if (!EdgeExists(left, right))
+                    CreateEdge(left, right);
+            }
+            else if (dist > maxDistance)
+            {
+                Vector2 mid = (left.Pos + right.Pos) * 0.5f;
+                Node red = CreateNode(mid, 0.5f, Color.red, 0, false, true);
+                CreateEdge(red, left);
+                CreateEdge(red, right);
+            }
+        }
+    }
+
 }
