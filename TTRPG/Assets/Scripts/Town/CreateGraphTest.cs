@@ -31,9 +31,17 @@ public class CreateGraphTest : MonoBehaviour
 
         if (spawn)
         {
-        StartCoroutine(crete());
-spawn = false;
+            StartCoroutine(waitt());
+
+            spawn = false;
         }
+    }
+
+    private IEnumerator waitt()
+    {
+        yield return new WaitForSeconds(5f);
+        StartCoroutine(crete());
+
     }
 
     IEnumerator crete()

@@ -583,6 +583,7 @@ Transform:
   - {fileID: 1034455979}
   - {fileID: 733747121}
   - {fileID: 1800906589}
+  - {fileID: 1803265293}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1603943842
@@ -707,6 +708,92 @@ MonoBehaviour:
   industrialThreshold: 250
   marketThreshold: 100
   commonThreshold: 50
+--- !u!1 &1803265292
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1803265293}
+  - component: {fileID: 1803265294}
+  - component: {fileID: 1803265295}
+  m_Layer: 0
+  m_Name: Building Types
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1803265293
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1803265292}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1189182299}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1803265294
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1803265292}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 461a9ab0166772a4aa896b067a19365e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1803265295
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1803265292}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: edf749acd9a7c894b80288f07dadfa61, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  createArea: {fileID: 1800906590}
+  buildingsAccordingToArea:
+  - areaType: 0
+    sprites:
+    - {fileID: -430812098237965502, guid: 5a587b010cc3f734c9f7405fd0f889ad, type: 3}
+    spriteScale: {x: 1, y: 5}
+  - areaType: 1
+    sprites:
+    - {fileID: -7411640322267208130, guid: b10a4fab0a3ac1742be43c908ec627cd, type: 3}
+    spriteScale: {x: 1, y: 5}
+  - areaType: 2
+    sprites:
+    - {fileID: -1116516773124893796, guid: 9c6affeec4ad3264ca3ccd8e426aaf1c, type: 3}
+    spriteScale: {x: 1, y: 5}
+  - areaType: 5
+    sprites:
+    - {fileID: 5400295362004407336, guid: fd249a54dbb1e7e478318fe21b24b30e, type: 3}
+    spriteScale: {x: 1, y: 5}
+  - areaType: 3
+    sprites:
+    - {fileID: 2609851761605400732, guid: 3a3708360ae9715499bc561be61230d8, type: 3}
+    spriteScale: {x: 1, y: 5}
+  - areaType: 4
+    sprites:
+    - {fileID: 1032500434221517878, guid: ca15226ca0d5c214d9026ea62e2ef02f, type: 3}
+    - {fileID: -9190570881974000248, guid: 0dc5791bed282c6458ab6876026b7fb7, type: 3}
+    spriteScale: {x: 1, y: 5}
+  buildDelay: 0.5
+  buildTimePerBuilding: 1.5
 --- !u!1 &1972054842
 GameObject:
   m_ObjectHideFlags: 0

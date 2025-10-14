@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using System;
 
 public class CreateArea : MonoBehaviour
 {
@@ -22,35 +23,9 @@ public class CreateArea : MonoBehaviour
     public float marketThreshold = 5f;
     public float commonThreshold = 3f;
 
-    public enum AreaType
-    {
-        Farmland,
-        Industrial,
-        Temple,
-        Market,
-        CommonHousing,
-        NobleHousing
-    }
-
-    [System.Serializable]
-    public class AreaWrapper
-    {
-        public AreaType areaType;
-        public List<Vector2> points;
-        public float areaSize;
-    }
-
+    public event Action<AreaWrapper> OnAreaCreated;
     private void Start()
     {
-        if (town == null) town = TownManager.instance;
-        if (town == null)
-        {
-            Debug.LogError("CreateArea: TownManager not found.");
-            enabled = false;
-            return;
-        }
-
-        // hook into new node creation event
         HexGraph.instance.OnNodeCreate += OnNodeCreated;
     }
 
@@ -97,6 +72,8 @@ public class CreateArea : MonoBehaviour
                 IncrementEdgeSidesShared(a, b);
                 IncrementEdgeSidesShared(b, node);
 
+                OnAreaCreated?.Invoke(wrapper);
+
                 Debug.Log($"Created new area between {node.name}, {a.name}, {b.name} — {wrapper.areaType}");
             }
         }
@@ -134,11 +111,30 @@ public class CreateArea : MonoBehaviour
 
     private AreaType ClassifyArea(float area)
     {
+        int rand = UnityEngine.Random.Range(0, 10);
+
         if (area >= farmlandThreshold) return AreaType.Farmland;
-        if (area >= industrialThreshold) return AreaType.Industrial;
-        if (area >= marketThreshold) return AreaType.Market;
+
+        if (area >= industrialThreshold)
+        {
+            if (rand < 3)
+                return AreaType.Industrial;
+            else
+                return AreaType.CommonHousing;
+        }
+        if (area >= marketThreshold)
+        {
+            if (rand < 3)
+                return AreaType.Market;
+            else
+                return AreaType.CommonHousing;
+        }
         if (area >= commonThreshold) return AreaType.CommonHousing;
-        return AreaType.NobleHousing;
+
+        if (rand < 5)
+            return AreaType.Temple;
+        else
+            return AreaType.NobleHousing;
     }
 
     private string GetPolygonKey(List<Vector2> pts)
