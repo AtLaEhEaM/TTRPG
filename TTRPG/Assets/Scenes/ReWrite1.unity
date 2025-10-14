@@ -582,6 +582,7 @@ Transform:
   m_Children:
   - {fileID: 1034455979}
   - {fileID: 733747121}
+  - {fileID: 1800906589}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1603943842
@@ -653,6 +654,59 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8a850c5d2ebfa0d4ab0821405f6fa825, type: 3}
+--- !u!1 &1800906588
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1800906589}
+  - component: {fileID: 1800906590}
+  m_Layer: 0
+  m_Name: Area Creation
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1800906589
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1800906588}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1189182299}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1800906590
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1800906588}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8fabc222027a96b47ae9bdbea44c5670, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  town: {fileID: 1034455978}
+  minAreaSize: 1
+  maxAreaSize: 20
+  debugDraw: 1
+  areas: []
+  farmlandThreshold: 500
+  industrialThreshold: 250
+  marketThreshold: 100
+  commonThreshold: 50
 --- !u!1 &1972054842
 GameObject:
   m_ObjectHideFlags: 0

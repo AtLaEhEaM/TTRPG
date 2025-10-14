@@ -2,6 +2,7 @@
 using UnityEngine;
 using System.Linq;
 using Unity.Mathematics;
+using System;
 
 public class TownManager : MonoBehaviour
 {
@@ -57,6 +58,7 @@ public class TownManager : MonoBehaviour
     {
         public Node a;
         public Node b;
+        public int sidesShared = 0;
         public Edge(Node a, Node b)
         {
             this.a = a;

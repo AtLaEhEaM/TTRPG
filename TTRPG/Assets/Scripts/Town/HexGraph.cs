@@ -1,5 +1,9 @@
+using System;
+using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using static TownManager;
 
 public class HexGraph : MonoBehaviour
 {
@@ -18,6 +22,14 @@ public class HexGraph : MonoBehaviour
     private List<TownManager.Node> currentRingNodes = new();
     private int currentRingNodeCount = 0;
     private float currentRingRadius = 0f;
+
+    public static HexGraph instance;
+    public event Action<TownManager.Node, bool> OnNodeCreate;
+
+    private void Awake()
+    {
+        instance = this;
+    }
 
     void Start()
     {
@@ -98,6 +110,8 @@ public class HexGraph : MonoBehaviour
 
     public void CreateNextNodeOnCurrentRing()
     {
+        bool newRing = false;
+
         if (currentRing >= maxRings) return;
 
         // Start a new ring if needed
@@ -112,6 +126,7 @@ public class HexGraph : MonoBehaviour
 
             currentRingNodeCount = Mathf.Max(3, baseNodes + currentRing + randomOffset);
             currentRingRadius = baseRadius + Mathf.Pow(currentRing, 1.5f) * ringSpacing;
+            newRing = true;
         }
 
         int i = currentRingNodes.Count;
@@ -146,6 +161,16 @@ public class HexGraph : MonoBehaviour
         var closestNodes = FindClosestNodesFromPreviousRings(node, town, 2);
         foreach (var c in closestNodes)
             town.CreateEdge(node, c);
+        
+        OnNodeCreate?.Invoke(node, newRing);
+        //StartCoroutine(OnNodeCreateWait(node, newRing));
+    }
+
+    private IEnumerator OnNodeCreateWait(TownManager.Node node, bool newRing)
+    {
+        yield return new WaitForSeconds(0.05f);
+
+        OnNodeCreate?.Invoke(node, newRing);
     }
 
     List<TownManager.Node> FindClosestNodesFromPreviousRings(TownManager.Node node, TownManager town, int count)

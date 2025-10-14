@@ -472,6 +472,7 @@
 "Assets/Scripts/Testing/AddResources.cs"
 "Assets/Scripts/Timber/Wood.cs"
 "Assets/Scripts/Timber/WoodMessageSend.cs"
+"Assets/Scripts/Town/CreateArea.cs"
 "Assets/Scripts/Town/CreateGraphTest.cs"
 "Assets/Scripts/Town/HexGraph.cs"
 "Assets/Scripts/Town/TownManager.cs"

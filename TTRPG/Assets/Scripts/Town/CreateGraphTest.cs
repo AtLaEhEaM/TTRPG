@@ -1,4 +1,5 @@
-using Unity.VisualScripting;
+using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -17,6 +18,7 @@ public class CreateGraphTest : MonoBehaviour
     float del = 5f;
     float c = 0;
 
+
     void Update()
     {
         
@@ -29,10 +31,18 @@ public class CreateGraphTest : MonoBehaviour
 
         if (spawn)
         {
-            graph.CreateNextNodeOnCurrentRing();
+        StartCoroutine(crete());
+spawn = false;
         }
     }
 
+    IEnumerator crete()
+    {
+        yield return new WaitForSeconds(0.05f);
+        graph.CreateNextNodeOnCurrentRing();
+
+        StartCoroutine(crete());
+    }
 
     public void ResetGame()
     {
