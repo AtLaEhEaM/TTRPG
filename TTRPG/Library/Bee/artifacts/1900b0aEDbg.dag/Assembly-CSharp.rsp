@@ -474,11 +474,17 @@
 "Assets/Scripts/Timber/WoodMessageSend.cs"
 "Assets/Scripts/Town/BuildBuildings.cs"
 "Assets/Scripts/Town/BuildingTypes.cs"
+"Assets/Scripts/Town/city/AreaWrapper.cs"
+"Assets/Scripts/Town/city/CityGenerator.cs"
+"Assets/Scripts/Town/city/CityNode.cs"
+"Assets/Scripts/Town/city/GraphVisualize.cs"
+"Assets/Scripts/Town/city/TestCityGen.cs"
 "Assets/Scripts/Town/CreateArea.cs"
 "Assets/Scripts/Town/CreateGraphTest.cs"
 "Assets/Scripts/Town/HexGraph.cs"
 "Assets/Scripts/Town/TownManager.cs"
 "Assets/Scripts/UI management/BackButton.cs"
+"Assets/Scripts/UI management/RawImageScrollFx.cs"
 -langversion:9.0
 /deterministic
 /optimize-

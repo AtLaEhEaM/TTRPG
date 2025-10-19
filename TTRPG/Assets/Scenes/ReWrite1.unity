@@ -119,6 +119,101 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &137108903
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 137108906}
+  - component: {fileID: 137108905}
+  - component: {fileID: 137108907}
+  - component: {fileID: 137108908}
+  m_Layer: 0
+  m_Name: cityTest
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &137108905
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 137108903}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d58e9ccf8526e34a9f852ad1f014f68, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  areaWrapper: {fileID: 137108908}
+  straightRoadsFromPrime: 1
+  debugDraw: 1
+  primePosition: {x: 0, y: 0}
+  initialRingNodes: 8
+  totalRings: 6
+  baseRingDistance: 5
+  ringDistanceMultiplier: 1.15
+  nodeJitter: 0.6
+  ringAngleOffset: 0.4
+  minConnectionsPerNode: 1
+  maxConnectionsPerNode: 3
+  incrementAreaThreshold: 1.1
+  farmlandThreshold: 12
+  industrialThreshold: 8
+  marketThreshold: 5
+  commonThreshold: 3
+  nodes: []
+  nextId: 0
+  currentRing: 0
+  generate: 1
+--- !u!4 &137108906
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 137108903}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -39.881493, y: 0.6065884, z: -0.15151682}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &137108907
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 137108903}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee0e3c1df2aa33247ba2214d41755276, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ran: {x: 1.36, y: 34.23}
+  test: 0
+  contin: 0
+--- !u!114 &137108908
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 137108903}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 88a87500b47fff842a8e7718b2a45873, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  areas: []
 --- !u!1 &316226265
 GameObject:
   m_ObjectHideFlags: 0
@@ -405,11 +500,12 @@ MonoBehaviour:
   town: {fileID: 1034455978}
   baseNodes: 8
   baseRadius: 4
+  ringSpacingRandom: {x: 7, y: 14}
   ringSpacing: 7
   maxRings: 20
   autoExpand: 0
   expandDelay: 0.1
-  additionalNodes: {x: -10, y: 10}
+  additionalNodes: {x: -3, y: 15}
 --- !u!1 &993919954
 GameObject:
   m_ObjectHideFlags: 0
@@ -528,13 +624,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4147538d79bd27346a3d5fd724869a44, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spawn: 0
-  speed: 5
-  everyOtherFrame: 0
-  inc: 0
-  dec: 3
-  maxNodes: 99
-  parent: {fileID: 993919955}
   graph: {fileID: 733747122}
 --- !u!4 &1183977112
 Transform:
@@ -566,7 +655,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1189182299
 Transform:
   m_ObjectHideFlags: 0
@@ -704,10 +793,13 @@ MonoBehaviour:
   maxAreaSize: 20
   debugDraw: 1
   areas: []
+  incrementAreaThreshold: 1.1
   farmlandThreshold: 500
   industrialThreshold: 250
   marketThreshold: 100
   commonThreshold: 50
+  ringNum: 0
+  ringNum2: 5
 --- !u!1 &1803265292
 GameObject:
   m_ObjectHideFlags: 0
@@ -1016,3 +1108,4 @@ SceneRoots:
   - {fileID: 1183977112}
   - {fileID: 1603943842}
   - {fileID: 993919955}
+  - {fileID: 137108906}

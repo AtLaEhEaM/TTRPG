@@ -10,6 +10,7 @@ public class HexGraph : MonoBehaviour
     public TownManager town;
     public int baseNodes = 6;
     public float baseRadius = 2f;
+    public Vector2 ringSpacingRandom;
     public float ringSpacing = 2f;
     public int maxRings = 5;
     public bool autoExpand = true;
@@ -25,6 +26,7 @@ public class HexGraph : MonoBehaviour
 
     public static HexGraph instance;
     public event Action<TownManager.Node, bool> OnNodeCreate;
+    public event Action OnNewRingCreate;
 
     private void Awake()
     {
@@ -72,6 +74,8 @@ public class HexGraph : MonoBehaviour
                 Mathf.FloorToInt(additionalNodes.y) + 1);
 
         int nodeCount = Mathf.Max(3, baseNodes + currentRing + randomOffset);
+
+        ringSpacing = UnityEngine.Random.Range(ringSpacingRandom.x, ringSpacingRandom.y);
         float radius = baseRadius + Mathf.Pow(currentRing, 1.5f) * ringSpacing;
 
         GenerateRing(nodeCount, radius);
@@ -127,6 +131,8 @@ public class HexGraph : MonoBehaviour
             currentRingNodeCount = Mathf.Max(3, baseNodes + currentRing + randomOffset);
             currentRingRadius = baseRadius + Mathf.Pow(currentRing, 1.5f) * ringSpacing;
             newRing = true;
+
+            OnNewRingCreate?.Invoke();
         }
 
         int i = currentRingNodes.Count;
