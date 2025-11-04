@@ -22,5 +22,7 @@ public class AddResources : MonoBehaviour
 
             send = false;
         }
+
+        GameSavingManager.instance.saveData.populationData.armyPop += 10;
     }
 }

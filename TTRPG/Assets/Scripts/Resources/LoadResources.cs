@@ -11,8 +11,7 @@ public class LoadResources : MonoBehaviour
     void Start()
     {
         GameSavingManager.instance.OnSaveDataLoadedEvent += LoadData;
-
-        GameManager.instance.economyManager.OnEconomyUpdate += LoadData;
+        GameManager.instance.economyManager.OnEconomyUpdate += LoadData; GameManager.instance.economyManager.OnEconomyUpdate += LoadData;
     }
 
     public void LoadData()
